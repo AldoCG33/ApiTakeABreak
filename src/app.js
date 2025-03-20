@@ -1,13 +1,19 @@
-const express = require('express'); // Importamos el módulo Express
-const app = express(); // Creamos una instancia de la aplicación Express
-const PORT = 3000; // Definimos el puerto en el que escuchará el servidor
+const express = require('express');
+const connectDB = require('./Data/Conexion/DB'); // Importar la conexión a MongoDB
+require('dotenv').config(); // Cargar variables de entorno
 
-// Ruta de ejemplo
+const app = express();
+
+// Conectar a la base de datos
+connectDB();
+
+app.use(express.json()); // Middleware para parsear JSON
+
 app.get('/', (req, res) => {
-    res.send('¡Hola, mundo desde Express!');
+    res.send('API funcionando');
 });
 
-// Arrancamos el servidor
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-    console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
+    console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
 });
