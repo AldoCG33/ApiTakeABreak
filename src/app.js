@@ -1,6 +1,7 @@
 const express = require('express');
 const connectDB = require('./Data/Conexion/DB'); // Importar la conexión a MongoDB
 require('dotenv').config(); // Cargar variables de entorno
+const Sync = require('./Data/sync'); // Importar la función de sincronización
 
 const app = express();
 
