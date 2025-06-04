@@ -1,9 +1,13 @@
 // user.js
 const mongoose = require('mongoose');
 
-
 const User = new mongoose.Schema({
   nombre: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  apellido: {
     type: String,
     required: true,
     trim: true,
@@ -31,7 +35,7 @@ const User = new mongoose.Schema({
     enum: ['masculino', 'femenino', 'otro'],
     required: true,
   },
-},{autoCreate: true} /* Auto-crear la colección si no existe*/);
+},{autoCreate: true} );
 
 
 const Usermodel = mongoose.model('Usuarios', User);
