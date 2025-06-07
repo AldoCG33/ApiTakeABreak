@@ -19,7 +19,6 @@ async function syncDatabase() {
     process.exit(1); // Finaliza con error
   }
 }
-
 // Ejecutar la sincronización
 syncDatabase();
 
