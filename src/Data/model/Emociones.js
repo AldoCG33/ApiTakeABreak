@@ -5,7 +5,7 @@ const Emociones = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Usuarios'
 },
-  source: {
+  origen: {
     type: String,
     enum: ['chatbot', 'chat_web'] },
   emocion: String,
