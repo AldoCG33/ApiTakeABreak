@@ -35,6 +35,12 @@ const Usuarios = new mongoose.Schema({
     enum: ['masculino', 'femenino', 'otro'],
     required: true,
   },
+   preferences: {
+    generos: [String],
+    autores: [String],
+  },
+  plataforma: [String],
+
 },{autoCreate: true} );
 
 
