@@ -33,11 +33,11 @@ const usuarioResolver= {
         
                 // Registrar nuevo usuario
                 const nuevoUsuarios = new Usuarios(input);
-                // console.log(nuevoUsuario)
+                //  console.log(nuevoUsuarios)
 
                 // guardar el usuario y mandar mensaje de confirmacion
-                await nuevoUsuarios.save();
-                return "Usuario Creado Correctamente";
+                 await nuevoUsuarios.save();
+                 return "Usuario Creado Correctamente";
             } catch(error){
                 // console.log(error);
                 throw new Error('Error al crear el usuario')
