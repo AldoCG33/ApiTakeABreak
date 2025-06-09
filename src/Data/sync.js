@@ -1,5 +1,5 @@
 const connectDB = require('./Conexion/DB'); // Importa la conexión a MongoDB
-const Usuario = require('./model/User');   // Importa el modelo de Usuario
+const Usuarios = require('./model/Usuarios');   // Importa el modelo de Usuario
 
 // Función para sincronizar las colecciones en MongoDB
 async function syncDatabase() {
@@ -9,8 +9,8 @@ async function syncDatabase() {
     console.log('Conexión a MongoDB');
 
     // Crear la colección de usuarios si no existe
-    await Usuario.createCollection();
-    console.log(`✅ Colección "${Usuario.collection.collectionName}" sincronizada.`);
+    await Usuarios.createCollection();
+    console.log(`✅ Colección "${Usuarios.collection.collectionName}" sincronizada.`);
 
     console.log('🎉 Sincronización de la base de datos completada.');
     process.exit(0); // Finaliza correctamente

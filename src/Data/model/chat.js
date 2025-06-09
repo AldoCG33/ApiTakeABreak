@@ -9,11 +9,10 @@ const Chat = new mongoose.Schema({
   },
   usuario_: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'usuarios',
+    ref: 'Usuarios',
     required: true,
     trim: true,
   },
-  
   fechaCreacion: {
     type: Date,
     default: Date.now,
