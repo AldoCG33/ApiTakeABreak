@@ -18,12 +18,9 @@ async function syncDatabase() {
       console.log(` Colección "${model.collection.collectionName}" sincronizada.`);
     }
 
-    console.log('Sincronización de la base de datos completada.');
-    process.exit(0);
+    console.log('✅ Sincronización de la base de datos completada.');
   } catch (error) {
-    console.error('Error en la sincronización de la base de datos:', error);
-    process.exit(1);
+    console.error('❌ Error en la sincronización de la base de datos:', error);
   }
 }
-
-syncDatabase();
+module.exports = syncDatabase;

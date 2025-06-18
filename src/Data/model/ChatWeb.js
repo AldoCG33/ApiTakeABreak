@@ -17,7 +17,7 @@ const ChatWeb = new mongoose.Schema({
     {
       usuarioId: { 
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Usuario' },
+        ref: 'Usuarios' },
       emocion: String,
       confianza: Number
     }
