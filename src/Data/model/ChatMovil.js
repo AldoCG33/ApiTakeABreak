@@ -7,8 +7,9 @@ const chatbotmovil = new mongoose.Schema({
 },
   mensaje: [
     {
-      rol: { type: String,
-         enum: ['user', 'bot'] 
+      rol: { 
+        type: String,
+        enum: ['user', 'bot'] 
         },
       texto: String
     }

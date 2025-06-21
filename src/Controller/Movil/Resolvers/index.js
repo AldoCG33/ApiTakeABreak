@@ -6,19 +6,25 @@ const { mergeResolvers } = require('@graphql-tools/merge')
 const usuarioResolver = require('./usuarioResolver');
 const usuarioSchema = require('../../../Data/Schemas/usuarioSchema');
 
+
 //chat
 
 
+
 //mensajes
+const mensajesResolver = require('./mensajesResolver');
+const mensajesSchema = require('../../../Data/Schemas/mensajesSchema');
 
 
 
 const resolvers = mergeResolvers([
-    usuarioResolver
+    usuarioResolver,
+    mensajesResolver
 ]);
 
 const typeDefs = mergeTypeDefs([
-    usuarioSchema
+    usuarioSchema,
+    mensajesSchema
 ]);
 
 
