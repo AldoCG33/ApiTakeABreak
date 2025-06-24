@@ -1,2 +1,22 @@
 //Aqui se implementara las librerias que estamos ocuapndo y su justificación 
 
+
+
+
+
+//librerias de movil 
+1. @graphql-tools/merge - Para combinar múltiples esquemas GraphQL (typeDefs) y resolvers cuando están divididos en varios archivos.
+
+2. apollo-server-express - Para integrar Apollo Server (GraphQL) con el servidor Express.
+
+3. bcryptjs - Para hashear contraseñas de manera segura antes de guardarlas en la base de datos.
+
+4. cors - Para permitir o bloquear peticiones desde otros dominios.
+
+5. dotenv - leer variables de entorno** desde un archivo `.env`.
+
+6. graphql - Es la librería básica que define GraphQL, requerida por Apollo Server.
+
+8. jsonwebtoken - Para generar y verificar tokens JWT(JSON Web Tokens).
+
+9. mongoose - para conectarte y manipular MongoDB.

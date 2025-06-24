@@ -2,7 +2,6 @@ const WebSocket = require('ws');
 const mongoose = require('mongoose');
 const ChatWeb = require('../../Data/model/ChatWeb');
 const Usuario = require('../../Data/model/Usuarios');
-
 const wss = new WebSocket.Server({ port: 5000 });
 
 // Manejo de conexiones
