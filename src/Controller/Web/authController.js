@@ -7,14 +7,14 @@ const register = async (req, res) => {
       nombre,
       apellido,
       email,
-      contraseña,
+      password,
       sexo,
       preferences = { generos: [], autores: [] },
       plataforma = []
     } = req.body;
 
     // Validación básica
-    if (!nombre || !apellido || !email || !contraseña || !sexo) {
+    if (!nombre || !apellido || !email || !password || !sexo) {
       return res.status(400).json({ mensaje: 'Todos los campos son obligatorios' });
     }
 
@@ -25,14 +25,14 @@ const register = async (req, res) => {
     }
 
     // Encriptar la contraseña
-    const hashedPassword = await bcrypt.hash(contraseña, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Crear nuevo usuario
     const nuevoUsuario = new Usuarios({
       nombre,
       apellido,
       email,
-      contraseña: hashedPassword,
+      password: hashedPassword,
       sexo,
       preferences,
       plataforma
@@ -50,7 +50,7 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { email, contraseña } = req.body;
+    const { email, password } = req.body;
 
     // Buscar usuario
     const usuario = await Usuarios.findOne({ email });
@@ -58,8 +58,21 @@ const login = async (req, res) => {
       return res.status(404).json({ mensaje: 'Usuario no encontrado' });
     }
 
+    if (!password) {
+      return res.status(400).json({ mensaje: 'Falta la contraseña' });
+    }
+
+    if (!usuario.password || usuario.password.length < 20) {
+      return res.status(500).json({ mensaje: 'La contraseña almacenada no es válida' });
+    }
+
+
+    console.log('Password ingresado:', password);
+    console.log('Password hasheado en BD:', usuario.password);
+
+
     // Comparar contraseñas
-    const passwordOk = await bcrypt.compare(contraseña, usuario.contraseña);
+    const passwordOk = await bcrypt.compare(password, usuario.password);
     if (!passwordOk) {
       return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
     }
