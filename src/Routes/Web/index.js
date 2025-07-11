@@ -17,4 +17,14 @@ router.get('/usuarios', async (req, res) => {
   }
 });
 
+// Ruta para obtener usuarios activos
+router.get('/usuarios/activos', async (req, res) => {
+  try {
+    const usuarios = await Usuarios.find().select('-contraseña');
+    res.json(usuarios);
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al obtener usuarios activos' });
+  }
+});
+
 module.exports = router;

@@ -98,4 +98,52 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login };
+const getProfile = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const usuario = await Usuarios.findById(userId).select('-contraseña');
+    
+    if (!usuario) {
+      return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+
+    res.json(usuario);
+  } catch (error) {
+    console.error('Error al obtener perfil:', error);
+    res.status(500).json({ mensaje: 'Error al obtener perfil' });
+  }
+};
+
+const updateProfile = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const { nombre, email, contraseña, descripcion } = req.body;
+
+    const usuario = await Usuarios.findById(userId);
+    if (!usuario) {
+      return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+
+    // Actualizar campos básicos
+    if (nombre) usuario.nombre = nombre;
+    if (email) usuario.email = email;
+    if (descripcion) usuario.descripcion = descripcion;
+
+    // Si se proporciona nueva contraseña, hashearla
+    if (contraseña) {
+      usuario.contraseña = await bcrypt.hash(contraseña, 10);
+    }
+
+    await usuario.save();
+
+    // Devolver usuario sin contraseña
+    const usuarioActualizado = await Usuarios.findById(userId).select('-contraseña');
+    res.json({ mensaje: 'Perfil actualizado con éxito', usuario: usuarioActualizado });
+
+  } catch (error) {
+    console.error('Error al actualizar perfil:', error);
+    res.status(500).json({ mensaje: 'Error al actualizar perfil' });
+  }
+};
+
+module.exports = { register, login, getProfile, updateProfile };
