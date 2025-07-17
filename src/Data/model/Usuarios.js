@@ -29,7 +29,7 @@ const Usuarios = new mongoose.Schema({
   password:{
     type: String,
     required: true,
-  },
+  }, 
   sexo: {
     type: String,
     enum: ['masculino', 'femenino', 'otro'],
