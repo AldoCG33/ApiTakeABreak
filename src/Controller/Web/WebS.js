@@ -28,7 +28,7 @@ wss.on('connection', (ws) => {
       // Crear nuevo mensaje
       const nuevoMensaje = {
         remitenteId: userId,
-        texto: text,
+        text: text,
         fecha: new Date()
       };
 
