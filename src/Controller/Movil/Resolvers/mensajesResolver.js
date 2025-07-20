@@ -1,40 +1,52 @@
 const ChatbotMovil = require('../../../Data/model/ChatMovil');
 
 const mensajesResolver = {
+  Query: {
+    obtenerChatPorUsuario: async (_, {}, ctx) => {
+      // Verificar autenticación
+      if (!ctx.usuarios || !ctx.usuarios.id) {
+        throw new Error('No autorizado');
+      }
+      
+      // Obtener historial del usuario autenticado
+      const historial = await ChatbotMovil.find({ usuarioId: ctx.usuarios.id })
+        .sort({ fecha: -1 });
+      return historial;
+    }
+  },
+
   Mutation: {
     guardarMensajesChat: async (_, { input }, ctx) => {
       try {
-        // 1. Validación básica
-        if (!input.mensaje || !Array.isArray(input.mensaje) || input.mensaje.length === 0) {
-          throw new Error('Debe proporcionar al menos un mensaje');
+        // Verificar autenticación
+        if (!ctx.usuarios || !ctx.usuarios.id) {
+          throw new Error('No autorizado');
         }
 
-        // 2. Crear el documento para MongoDB
-        const nuevoChat = {
-          mensaje: input.mensaje.map(msg => ({
-            rol: msg.rol,
-            texto: msg.texto
-          })),
-          fecha: new Date().toISOString()
-        };
+        // Buscar si ya existe un chat para este usuario
+        let chatExistente = await ChatbotMovil.findOne({ 
+          usuarioId: ctx.usuarios.id 
+        });
 
-        // 3. Guardar en la base de datos
-        const chatGuardado = await ChatbotMovil.create(nuevoChat);
-        
-        if (!chatGuardado) {
-          throw new Error('Error al guardar en la base de datos');
+        if (chatExistente) {
+          // Si existe, agregar los nuevos mensajes al array existente
+          chatExistente.mensaje.push(...input.mensaje);
+          const resultado = await chatExistente.save();
+          return resultado;
+        } else {
+          // Si no existe, crear un nuevo documento
+          const nuevoHistorial = new ChatbotMovil({
+            usuarioId: ctx.usuarios.id,
+            mensaje: input.mensaje
+          });
+
+          const resultado = await nuevoHistorial.save();
+          return resultado;
         }
-
-        // 4. Retornar el resultado
-        return {
-          id: chatGuardado._id.toString(),
-          mensaje: chatGuardado.mensaje,
-          fecha: chatGuardado.fecha
-        };
 
       } catch (error) {
-        console.error("Error detallado al guardar chat:", error);
-        throw new Error(`Error al guardar el chat: ${error.message}`);
+        console.error("Error al guardar chat:", error);
+        throw new Error("No se pudo guardar el chat");
       }
     }
   }

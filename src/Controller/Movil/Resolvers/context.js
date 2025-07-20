@@ -1,17 +1,29 @@
 const jwt = require('jsonwebtoken');
-require('dotenv').config({path:'.env'})
+require('dotenv').config({ path: '.env' });
 
-const context = ({req}) => {
-
-    const token = req.headers['authorization'] || '';
-    if(token){
-        try{
-            const usuarios = jwt.verify(token, process.env.SECRETA);
-            return {usuarios}
-        }catch(error){
-            console.log('el error de verficacion del token es: ',error)
-        }
+const context = async ({ req }) => {
+    // Obtener el token del header
+    const authHeader = req.headers['authorization'] || '';
+    
+    // Verificar si el token existe 
+    if (!authHeader.startsWith('Bearer ')) {
+        return { usuarios: null };
     }
-}
 
-module.exports = context
+    const token = authHeader.split(' ')[1];
+    
+    if (!token) {
+        return { usuarios: null };
+    }
+
+    try {
+        // Verificar y decodificar el token
+        const usuarios = jwt.verify(token, process.env.SECRETA);
+        return { usuarios };
+    } catch (error) {
+        console.log('Error de verificación del token:', error);
+        return { usuarios: null };
+    }
+};
+
+module.exports = context;

@@ -1,41 +1,88 @@
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
-
-    # Tipo para cada mensaje del chat
     type MensajeChat {
-    rol: String
-    texto: String
+        rol: String
+        texto: String
+        fecha: String
     }
 
-    # Tipo para todo el historial de conversación
     type ChatbotMovil {
-    id: ID
-    usuarioId: ID
-    mensaje: [MensajeChat]
-    fecha: String
+        id: ID
+        usuarioId: ID
+        mensaje: [MensajeChat]
+        fecha: String
+    }
+
+    type UsuarioAutenticado {
+        id: ID
+        email: String
+        nombre: String
+        apellido: String
+    }
+
+    type Token {
+        token: String
+        usuario: UsuarioAutenticado
     }
 
     type Query {
-    obtenerChatPorUsuario(usuarioId: ID!): [ChatbotMovil]
+        obtenerChatPorUsuario: [ChatbotMovil]
+        obtenerUsuarios: [Usuarios]
     }
 
-    # Input para un mensaje individual
     input MensajeChatInput {
-    rol: String!
-    texto: String!
+        rol: String!
+        texto: String!
     }
 
-    # Input para guardar un historial completo (o agregar mensajes)
     input ChatbotMovilInput {
-    mensaje: [MensajeChatInput]!
+        mensaje: [MensajeChatInput]!
     }
-    
+
+    input UsuariosInput {
+        nombre: String!
+        apellido: String!
+        edad: Int!
+        sexo: String!
+        email: String!
+        password: String!
+        preferences: PreferenciasInput
+        plataforma: [String]
+    }
+
+    input PreferenciasInput {
+        generos: [String]
+        autores: [String]
+    }
+
+    input AutenticarInput {
+        email: String!
+        password: String!
+    }
 
     type Mutation {
-    guardarMensajesChat(input: ChatbotMovilInput!): ChatbotMovil
+        guardarMensajesChat(input: ChatbotMovilInput!): ChatbotMovil
+        crearUsuarios(input: UsuariosInput): String
+        autenticarUsuarios(input: AutenticarInput): Token
     }
 
+    type Preferencias {
+        generos: [String]
+        autores: [String]
+    }
+
+    type Usuarios {
+        id: ID
+        nombre: String!
+        apellido: String!
+        edad: Int!
+        sexo: String!
+        email: String!
+        fechaCreacion: String
+        preferences: Preferencias
+        plataforma: [String]
+    }
 `;
 
 module.exports = typeDefs;
