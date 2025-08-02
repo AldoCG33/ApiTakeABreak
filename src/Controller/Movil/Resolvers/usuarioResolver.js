@@ -6,11 +6,11 @@ const usuarioResolver = {
     Query: {
         obtenerUsuarios: async (_, {}, ctx) => {
             // Verificar autenticación
+          
             if (!ctx.usuarios || !ctx.usuarios.id) {
                 throw new Error('No autorizado');
             }
-            
-            const usuarios = await Usuarios.find();
+            const usuarios = await Usuarios.find({ _id: ctx.usuarios.id });
             return usuarios;
         }
     },
