@@ -62,7 +62,7 @@ const typeDefs = gql`
     }
 
     type Mutation {
-        guardarMensajesChat(input: ChatbotMovilInput!): ChatbotMovil
+         guardarMensajesChat(input: ChatbotMovilInput! conversationId: ID ): ChatbotMovil
         crearUsuarios(input: UsuariosInput): String
         autenticarUsuarios(input: AutenticarInput): Token
     }

@@ -16,34 +16,29 @@ const mensajesResolver = {
   },
 
   Mutation: {
-    guardarMensajesChat: async (_, { input }, ctx) => {
+   guardarMensajesChat: async (_, { input, conversationId }, ctx) => {
       try {
-        // Verificar autenticación
         if (!ctx.usuarios || !ctx.usuarios.id) {
           throw new Error('No autorizado');
         }
 
-        // Buscar si ya existe un chat para este usuario
-        let chatExistente = await ChatbotMovil.findOne({ 
-          usuarioId: ctx.usuarios.id 
-        });
-
-        if (chatExistente) {
-          // Si existe, agregar los nuevos mensajes al array existente
-          chatExistente.mensaje.push(...input.mensaje);
-          const resultado = await chatExistente.save();
-          return resultado;
+        if (conversationId) {
+          // Actualizar conversación existente
+          const chatActualizado = await ChatbotMovil.findByIdAndUpdate(
+            conversationId,
+            { $push: { mensaje: { $each: input.mensaje } } },
+            { new: true }
+          );
+          return chatActualizado;
         } else {
-          // Si no existe, crear un nuevo documento
-          const nuevoHistorial = new ChatbotMovil({
+          // Crear nueva conversación
+          const nuevoChat = new ChatbotMovil({
             usuarioId: ctx.usuarios.id,
             mensaje: input.mensaje
           });
-
-          const resultado = await nuevoHistorial.save();
+          const resultado = await nuevoChat.save();
           return resultado;
         }
-
       } catch (error) {
         console.error("Error al guardar chat:", error);
         throw new Error("No se pudo guardar el chat");
