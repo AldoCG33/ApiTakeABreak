@@ -5,6 +5,7 @@ const typeDefs = gql`
         rol: String
         texto: String
         fecha: String
+        emotion: String 
     }
 
     type ChatbotMovil {
@@ -34,6 +35,7 @@ const typeDefs = gql`
     input MensajeChatInput {
         rol: String!
         texto: String!
+        emotion: String!
     }
 
     input ChatbotMovilInput {

@@ -17,6 +17,9 @@ const chatbotmovil = new mongoose.Schema({
         type: String,
         required: true
       },
+      emotion:{
+        type:String
+      },
       fecha: {
         type: Date,
         default: Date.now
