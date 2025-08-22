@@ -1,66 +1,59 @@
-const WebSocket = require('ws');
-const mongoose = require('mongoose');
 const ChatWeb = require('../../Data/model/ChatWeb');
 const Usuario = require('../../Data/model/Usuarios');
 
-const wss = new WebSocket.Server({ port: 5000 });
+module.exports = (wss) => {
+  wss.on('connection', (ws) => {
+    console.log('Cliente conectado');
 
-// Manejo de conexiones
-wss.on('connection', (ws) => {
-  console.log('Cliente conectado');
+    ws.on('message', async (message) => {
+      try {
+        const data = JSON.parse(message);
+        const { userId, recipientId, text } = data;
 
-  ws.on('message', async (message) => {
-    try {
-      const data = JSON.parse(message);
-      const { userId, recipientId, text } = data;
-
-      // Buscar o crear un chat entre los dos usuarios
-      let chat = await ChatWeb.findOne({
-        participantes: { $all: [userId, recipientId] }
-      });
-
-      if (!chat) {
-        chat = new ChatWeb({
-          participantes: [userId, recipientId],
-          mensajes: []
+        let chat = await ChatWeb.findOne({
+          participantes: { $all: [userId, recipientId] }
         });
-      }
 
-      // Crear nuevo mensaje
-      const nuevoMensaje = {
-        remitenteId: userId,
-        texto: text,
-        fecha: new Date()
-      };
-
-      chat.mensajes.push(nuevoMensaje);
-      await chat.save();
-
-      // Obtener el nombre del remitente
-      const remitente = await Usuario.findById(userId).select('nombre');
-
-      // Preparar respuesta con nombre
-      const response = {
-        remitenteId: userId,
-        remitenteNombre: remitente?.nombre || 'Desconocido',
-        text: text,
-        timestamp: new Date().toLocaleTimeString(),
-        date: new Date().toLocaleDateString()
-      };
-
-      // Enviar a todos los clientes conectados
-      wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify(response));
+        if (!chat) {
+          chat = new ChatWeb({
+            participantes: [userId, recipientId],
+            mensajes: []
+          });
         }
-      });
 
-    } catch (err) {
-      console.error('Error al procesar el mensaje:', err);
-    }
-  });
+        const nuevoMensaje = {
+          remitenteId: userId,
+          texto: text,
+          fecha: new Date()
+        };
 
-  ws.on('close', () => {
-    console.log('Cliente desconectado');
+        chat.mensajes.push(nuevoMensaje);
+        await chat.save();
+
+        const remitente = await Usuario.findById(userId).select('nombre');
+
+        const response = {
+          remitenteId: userId,
+          recipientId,
+          remitenteNombre: remitente?.nombre || 'Desconocido',
+          text,
+          timestamp: new Date().toLocaleTimeString(),
+          date: new Date().toLocaleDateString()
+        };
+
+        wss.clients.forEach((client) => {
+          if (client.readyState === ws.OPEN) {
+            client.send(JSON.stringify(response));
+          }
+        });
+
+      } catch (err) {
+        console.error('Error al procesar el mensaje:', err);
+      }
+    });
+
+    ws.on('close', () => {
+      console.log('Cliente desconectado');
+    });
   });
-});
+};
