@@ -1,90 +1,92 @@
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
-    type MensajeChat {
-        rol: String
-        texto: String
-        fecha: String
-        emotion: String 
-    }
+  scalar Date
 
-    type ChatbotMovil {
-        id: ID
-        usuarioId: ID
-        mensaje: [MensajeChat]
-        fecha: String
-    }
+  type MensajeChat {
+    rol: String
+    texto: String
+    fecha: String
+    emotion: String
+  }
 
-    type UsuarioAutenticado {
-        id: ID
-        email: String
-        nombre: String
-        apellido: String
-    }
+  type ChatbotMovil {
+    id: ID
+    usuarioId: ID
+    mensaje: [MensajeChat]
+    fecha: String
+  }
 
-    type Token {
-        token: String
-        usuario: UsuarioAutenticado
-    }
+  type UsuarioAutenticado {
+    id: ID
+    email: String
+    nombre: String
+    apellido: String
+  }
 
-    type Query {
-        obtenerChatPorUsuario: [ChatbotMovil]
-        obtenerUsuarios: [Usuarios]
-    }
+  type Token {
+    token: String
+    usuario: UsuarioAutenticado
+  }
 
-    input MensajeChatInput {
-        rol: String!
-        texto: String!
-        emotion: String!
-    }
+  type Query {
+    obtenerChatPorUsuario: [ChatbotMovil]
+    obtenerUsuarios: [Usuarios]
+  }
 
-    input ChatbotMovilInput {
-        mensaje: [MensajeChatInput]!
-    }
+  input MensajeChatInput {
+    rol: String!
+    texto: String!
+    emotion: String!
+  }
 
-    input UsuariosInput {
-        nombre: String!
-        apellido: String!
-        edad: Int!
-        sexo: String!
-        email: String!
-        password: String!
-        preferences: PreferenciasInput
-        plataforma: [String]
-    }
+  input ChatbotMovilInput {
+    mensaje: [MensajeChatInput]!
+  }
 
-    input PreferenciasInput {
-        generos: [String]
-        autores: [String]
-    }
+  input UsuariosInput {
+    nombre: String!
+    apellido: String!
+    edad: Int!
+    sexo: String!
+    email: String!
+    password: String!
+    preferences: PreferenciasInput
+    plataforma: [String]
+  }
 
-    input AutenticarInput {
-        email: String!
-        password: String!
-    }
+  input PreferenciasInput {
+    generos: [String]
+    autores: [String]
+  }
 
-    type Mutation {
-         guardarMensajesChat(input: ChatbotMovilInput! conversationId: ID ): ChatbotMovil
-        crearUsuarios(input: UsuariosInput): String
-        autenticarUsuarios(input: AutenticarInput): Token
-    }
+  input AutenticarInput {
+    email: String!
+    password: String!
+  }
 
-    type Preferencias {
-        generos: [String]
-        autores: [String]
-    }
+  type Mutation {
+    guardarMensajesChat(input: ChatbotMovilInput!, conversationId: ID): ChatbotMovil
+    crearUsuarios(input: UsuariosInput): String
+    autenticarUsuarios(input: AutenticarInput): Token
+  }
 
-    type Usuarios {
-        id: ID
-        nombre: String!
-        apellido: String!
-        edad: Int!
-        sexo: String!
-        email: String!
-        fechaCreacion: String
-        preferences: Preferencias
-        plataforma: [String]
-    }
+  type Preferencias {
+    generos: [String]
+    autores: [String]
+  }
+
+  type Usuarios {
+    id: ID
+    nombre: String!
+    apellido: String!
+    edad: Int!
+    sexo: String!
+    email: String!
+    fechaCreacion: String
+    preferences: Preferencias
+    plataforma: [String]
+  }
 `;
 
 module.exports = typeDefs;
