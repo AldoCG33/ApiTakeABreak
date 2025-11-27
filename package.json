@@ -13,6 +13,7 @@
   "dependencies": {
     "@graphql-tools/merge": "^9.0.24",
     "apollo-server-express": "^3.13.0",
+    "axios": "^1.13.2",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
@@ -21,6 +22,7 @@
     "graphql": "^16.10.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.12.1",
-    "ws": "^8.18.2"
+    "querystring": "^0.2.1",
+    "ws": "^8.18.3"
   }
 }

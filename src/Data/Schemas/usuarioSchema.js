@@ -23,8 +23,15 @@ const typeDefs = gql`
         token: String
     }
 
+    type SpotifyCategory {
+        id: String!
+        name: String!
+        imageUrl: String
+    }
+
     type Query {
         obtenerUsuarios: [Usuarios]
+        listarSpotifyGeneros(limit: Int = 40, locale: String): [SpotifyCategory!]!
     }
 
     input PreferenciasInput {
@@ -51,6 +58,8 @@ const typeDefs = gql`
     type Mutation {
         crearUsuarios(input: UsuariosInput): String
         autenticarUsuarios(input: AutenticarInput): Token
+
+        actualizarPreferenciasUsuario(input: PreferenciasInput!): Usuarios!
     }
 `;
 

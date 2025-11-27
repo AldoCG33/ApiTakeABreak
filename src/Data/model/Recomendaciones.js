@@ -11,9 +11,7 @@ const Recomendaciones = new mongoose.Schema({
       tipo: { type: String },
       titulo: String,
       url: String,
-      fuente: String,
-      feedback: Number
-      
+      fuante: String
     }
   ],
   timestamp: { type: Date, default: Date.now }
